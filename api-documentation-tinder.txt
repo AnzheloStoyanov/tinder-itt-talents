@@ -1,0 +1,219 @@
+Регистрация на потребител:
+a. Метод: POST
+b. url: /signup
+c. required headers: ‘Content-Type’ : ‘application/json’
+d. example req body:
+{
+"email": "example@abv.bg",
+"password": "bahur"
+}
+
+Status Code: 201 Created
+Response : {token:"JAJDNLDC:DNEOPRmmcls;x"}
+
+Status Code: 409 Conflict
+Response :  User already exists. Plaeace login
+
+Status Code: 500 Internal error
+Response :  error
+
+//////////////////////////////////////////////////////////////////
+Вход на потребител:
+/////////////////////
+Method: POST
+URL: /login
+Required Headers: 'Content-Type': 'application/json'
+Example Request Body:
+{
+    "email": "example@example.com",
+    "password": "mypassword"
+}
+
+e. possible responses: 
+
+Status Code: 200 OK
+Response : {
+             "token" : "JAJDNLDC:DNEOPRmmcls;x",
+             "userId" : "12iiisncd2220388"
+            }
+
+Status Code: 400,  500 
+
+
+//////////////////////////////////////////////////////////////////
+Промяна на характеристики на потребител:
+////////////////////////////////////////
+
+Method: PUT
+URL: /user
+Required Headers: 'Content-Type': 'application/json'
+Example Request Body:
+{
+    "formData": {
+        "user_id": "abc123",
+        "first_name": "John",
+        "dob_day": 10,
+        "dob_month": 4,
+        "dob_year": 1990,
+        "show_gender": true,
+        "gender_identity": "Male",
+        "gender_interest": "Female",
+        "url": "https://example.com",
+        "about": "I am a software engineer",
+        "matches": ["xyz456"]
+    }
+}
+
+Status Code: 200 OK , 500 Internal error
+
+ 
+/////////////////////////////////////////////////////////////////////
+Взимане на user по gander
+/////////////////////////
+a. Method: GET
+b. URL: /gendared-users
+c. Required query parameter: gender
+d. Example request: /gendared-users?gender=male
+e. Example response:
+
+Status Code: 200 OK, 500
+Response:
+[{
+    "_id": "6430688c3b06768921cf7d38",
+    "user_id": "test",
+    "hashes_password": null,
+    "first_name": "Anzhelo",
+    "dob_day": 2,
+    "dob_month": 10,
+    "dob_year": 1996,
+    "show_gender": true,
+    "gender_identity": "man",
+    "gender_interest": "woman",
+    "email": "anzhelostojanov@gmail.com",
+    "url": "https://i.imgur.com/UCDFpma.jpg",
+    "about": " Work hard play hard",
+    "mathes": [{
+        "user_id": "test1"
+    }, {
+        "user_id": "test2"
+    }]
+},...
+]
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+Get all users by user IDs
+/////////////////////////
+
+a. Method: GET
+b. URL: /users
+c. Required query parameter: userIds (an array of user IDs in string format)
+d. Example Request: GET /users?userIds=["user1", "user2"]
+e. Example Response:
+Status Code: 200 OK
+Response Body:
+
+perl
+Copy code
+[
+    {
+        "_id": "611b2beccbcf6242d400a996",
+        "user_id": "user1",
+        "email": "user1@example.com",
+        "hashed_password": "$2b$10$bmLCEhGgC.8XzyRQzdp63OaKDWq3vup8e..Op1hyCkLjAamIGa4qi",
+        "__v": 0
+    },
+    {
+        "_id": "611b2beccbcf6242d400a997",
+        "user_id": "user2",
+        "email": "user2@example.com",
+        "hashed_password": "$2b$10$95zvXgR9K2zCNYgmAtiz3Ow20MZ8g0NQa05ZzIg3IDM3X9Ntb5fSe",
+        "__v": 0
+    }
+]
+f. Possible Status Codes:200 OK, 400 Bad Request, 500 Internal Server Error
+
+
+///////////////////////////////////////////////////////////////////////////
+Get messages between two users:
+///////////////////////////////
+
+a. Method: GET
+
+b. URL: /messages
+
+c. Required query parameters:
+
+userId: The user ID of the first user
+correspondingUserId: The user ID of the second user
+
+d. Example request: GET /messages?userId=1234&correspondingUserId=5678
+
+f. Status Code: 200 OK
+
+g. Example response body:
+
+[{
+    "_id": "60713a9826caac9b2fa0d605",
+    "from_userId": "1234",
+    "to_userId": "5678",
+    "message": "Hello, how are you?",
+    "createdAt": "2021-03-08T09:15:04.000Z"
+}, {
+    "_id": "60713ab426caac9b2fa0d606",
+    "from_userId": "5678",
+    "to_userId": "1234",
+    "message": "I'm good, thanks for asking. How about you?",
+    "createdAt": "2021-03-08T09:15:40.000Z"
+}, {
+    "_id": "60713abb26caac9b2fa0d607",
+    "from_userId": "1234",
+    "to_userId": "5678",
+    "message": "I'm doing well too, thanks.",
+    "createdAt": "2021-03-08T09:16:27.000Z"
+}]
+
+
+
+////////////////////////////////////////////////////////////////////
+ ADD A MESSAGE TO OUR DATABSE
+///////////////////////////////////////////
+Method: POST
+URL: /message
+Required Headers: 'Content-Type': 'application/json'
+Example Request Body:
+
+{
+"message": {
+"from": "user1",
+"to": "user2",
+"content": "Hello, how are you?",
+"timestamp": "2023-04-10T09:32:12.453Z"
+}
+}
+Status Code: 200 OK
+Response: insertedMessage
+
+Status Code: 500 Internal error
+
+
+////////////////////////////////////////////////////////////////
+ADD MATCH ENDPOINT:
+////////////////////
+
+a. Method: PUT
+b. URL: /addmatch
+c. Required headers: Content-Type: application/json
+d. Example request body:
+
+{
+    "userId": "123",
+    "matchedUserId": "456"
+}
+Status Code: 200 OK ,404 Not Found ,500 Internal error
+
+
+
